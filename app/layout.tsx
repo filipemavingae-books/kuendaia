@@ -5,16 +5,17 @@ import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 import { Suspense } from "react"
 
-import { Inter, Inter as V0_Font_Inter, Geist_Mono as V0_Font_Geist_Mono, Source_Serif_4 as V0_Font_Source_Serif_4 } from 'next/font/google'
+import { Roboto, Inter as V0_Font_Inter, Geist_Mono as V0_Font_Geist_Mono, Source_Serif_4 as V0_Font_Source_Serif_4 } from 'next/font/google'
 
 // Initialize fonts
 V0_Font_Inter({ weight: ["100","200","300","400","500","600","700","800","900"] })
 V0_Font_Geist_Mono({ weight: ["100","200","300","400","500","600","700","800","900"] })
 V0_Font_Source_Serif_4({ weight: ["200","300","400","500","600","700","800","900"] })
 
-const inter = Inter({
+const roboto = Roboto({
+  weight: ["300", "400", "500", "700"],
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-roboto",
   display: "swap",
 })
 
@@ -30,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="pt-BR" className={inter.variable}>
+    <html lang="pt-BR" className={roboto.variable}>
       <body className="font-sans antialiased">
         <Suspense fallback={null}>{children}</Suspense>
         <Analytics />
