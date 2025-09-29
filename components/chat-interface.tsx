@@ -5,7 +5,7 @@ import type React from "react"
 import { useState, useRef, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Menu, Send } from "lucide-react"
+import { Menu, Send, Loader2 } from "lucide-react"
 import { KuendaLogo } from "@/components/kuenda-logo"
 import { ModelSelector } from "@/components/model-selector"
 import { SettingsPanel } from "@/components/settings-panel"
@@ -124,7 +124,7 @@ export function ChatInterface({ user, profile, subscription }: ChatInterfaceProp
   }
 
   return (
-    <div className="flex h-screen bg-background">
+    <div className="flex h-screen bg-gradient-to-br from-background via-background to-blue-50/20">
       {/* Settings Panel */}
       <SettingsPanel
         isOpen={showSettings}
@@ -137,9 +137,14 @@ export function ChatInterface({ user, profile, subscription }: ChatInterfaceProp
       {/* Main Chat Area */}
       <div className="flex flex-col flex-1">
         {/* Header */}
-        <header className="flex items-center justify-between px-4 py-3 border-b border-border bg-background">
+        <header className="flex items-center justify-between px-4 py-3 border-b border-border backdrop-blur-sm bg-background/95 shadow-sm">
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="icon" onClick={() => setShowSettings(true)} className="text-foreground">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setShowSettings(true)}
+              className="text-foreground hover:bg-accent transition-colors"
+            >
               <Menu className="h-5 w-5" />
             </Button>
             <div className="flex items-center gap-2">
@@ -154,33 +159,41 @@ export function ChatInterface({ user, profile, subscription }: ChatInterfaceProp
         </header>
 
         {/* Messages Area */}
-        <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4">
+        <div className="flex-1 overflow-y-auto px-4 py-6 space-y-6 scroll-smooth">
           {messages.map((message) => (
             <ChatMessage key={message.id} message={message} />
           ))}
           {isLoading && (
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <div className="animate-pulse">Kuenda IA está pensando...</div>
+            <div className="flex items-center gap-3 text-muted-foreground animate-fade-in">
+              <Loader2 className="h-5 w-5 animate-spin text-primary" />
+              <span className="text-sm font-medium">Kuenda IA está pensando...</span>
             </div>
           )}
           <div ref={messagesEndRef} />
         </div>
 
         {/* Input Area */}
-        <div className="border-t border-border bg-background px-4 py-4">
+        <div className="border-t border-border backdrop-blur-sm bg-background/95 px-4 py-4 shadow-lg">
           <div className="max-w-4xl mx-auto flex gap-2">
             <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Digite sua mensagem..."
-              className="flex-1 border-border bg-background text-foreground"
+              className="flex-1 border-border bg-background text-foreground h-11 transition-all duration-200 focus:ring-2 focus:ring-primary/20"
               disabled={isLoading}
             />
-            <Button onClick={handleSendMessage} disabled={isLoading || !input.trim()} className="font-semibold">
-              <Send className="h-4 w-4" />
+            <Button
+              onClick={handleSendMessage}
+              disabled={isLoading || !input.trim()}
+              className="font-semibold h-11 px-6 shadow-lg hover:shadow-xl transition-all"
+            >
+              {isLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5" />}
             </Button>
           </div>
+          <p className="text-center text-xs text-muted-foreground mt-3">
+            Kuenda IA pode cometer erros. Verifique informações importantes.
+          </p>
         </div>
       </div>
     </div>
